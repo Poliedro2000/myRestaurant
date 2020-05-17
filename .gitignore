@@ -1,0 +1,14 @@
+#Dependencies
+node_modules/
+
+#files
+package-lock.json
+socket.js
+
+#enviroment
+.env 
+Procfile
+
+#docker's files
+Dockerfile
+*.yml
