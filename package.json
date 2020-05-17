@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Poliedro2000/best_comtrol.git"
+    "url": "git+https://github.com/Poliedro2000/myRestaurant.git"
   },
   "author": "Francisco Gonzalez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Poliedro2000/best_comtrol/issues"
+    "url": "https://github.com/Poliedro2000/myRestaurant.git/issues"
   },
-  "homepage": "https://github.com/Poliedro2000/best_comtrol#readme",
+  "homepage": "https://github.com/Poliedro2000/myRestaurant.git#readme",
   "dependencies": {
     "amqplib": "^0.5.5",
     "bcrypt": "^4.0.1",
@@ -22,7 +22,6 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.7-alpha.3",
     "express-metrics": "^1.1.0",
     "jwt-simple": "^0.5.6",
     "moment": "^2.25.3",
