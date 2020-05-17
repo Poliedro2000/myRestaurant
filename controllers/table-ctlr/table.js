@@ -15,7 +15,6 @@ module.exports = {
                msg: 'No se pudo procesar el ingreso. Intenet de nuevo.'
             });
          }
-
          return res.status(200).json({
             dataInfo,
             code: 200,
