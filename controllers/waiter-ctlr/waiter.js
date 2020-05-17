@@ -137,52 +137,6 @@ module.exports = {
          });
       }
    },
-   uploadImageWaiter: async (req, res) => {
-      try {
-         var idWaiter = {
-            plain: true,
-            where: {
-               id: req.params.id
-            },
-            returning: true
-         };
-         var file = req.files;
-         if (!file) {
-            return res.status(404).json({
-               code: 404,
-               msg: 'Debe asignar una imagen.'
-            });
-
-         } else {
-            let avatar = file.avatar;
-            var objWtr = {
-               waiterImage: avatar.name
-            };
-            var dataInfo = await models.Waiters.update(objWtr, idWaiter);
-
-            if (!dataInfo) {
-               return res.status(403).json({
-                  code: 403,
-                  msg: 'No se alamcenó el dato de la imagen.'
-               });
-            } else {
-               var pathImg = './waiters-imgs/';
-               var moveImg = pathImg + avatar.name;
-               var imgWaiter = dataInfo.waiterImage
-               await avatar.mv(moveImg);
-               var img = path.resolve(pathImg + imgWaiter);
-               return res.sendFile(img);
-            }
-         }
-      } catch (error) {
-         console.log('uploadImageWaiter');
-         console.log(error)
-         return res.status(500).json({
-            code: 500,
-            msg: 'Al parecer, el servicio no está disponible en estos momentos.'
-         });
-      }
-   },
    updateInfoWaiter: async (req, res) => {
       try {
          var idWaiter = {
