@@ -104,6 +104,14 @@ module.exports = {
    }
 }
 
+/*async function Profit(objecProfit) {
+   return objecProfit.prices.map(function(value, index){
+      var sum = 0;
+      sum += objecProfit.prices[index];
+      return sum;
+   });
+}*/
+
 async function Profit(objecProfit) {
    return objecProfit.map(function (value, index) {
       var sum = 0;
