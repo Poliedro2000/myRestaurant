@@ -7,7 +7,7 @@ module.exports = {
          var dataInfo;
          var setWhere = {};
          var params = req.body;
-         var _date = new Date(await setHour());
+         var _date = new Date(),
 
          if (params.toDay === '') {
             setWhere = {
@@ -107,7 +107,7 @@ module.exports = {
 /*async function Profit(objecProfit) {
    return objecProfit.prices.map(function(value, index){
       var sum = 0;
-      sum += objecProfit.prices[index];
+      sum += objecProfit[index].prices[index];
       return sum;
    });
 }*/
@@ -121,9 +121,4 @@ async function Profit(objecProfit) {
       });
       return sum;
    });
-}
-
-async function setHour() {
-   var date = new Date();
-   return date.setHours(date.getHours() - 5);
 }

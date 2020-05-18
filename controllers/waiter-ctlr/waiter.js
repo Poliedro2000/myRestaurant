@@ -2,7 +2,6 @@
 
 const models = require('../../models');
 const saltRounds = 10;
-var path = require('path');
 const bcrypt = require('bcrypt');
 const {
    encode
