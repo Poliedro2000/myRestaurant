@@ -50,19 +50,18 @@ const {
 server.use((req, res, next) => {
     var origin = req.headers.origin
     if (arrAccess.indexOf(origin) == -1) {
-        return res.status(500).json({
-            message:'No está acturizado a acceder a este sitio.'
+        return res.status(200).json({
+            message: 'No está acturizado a acceder a este sitio.'
         });
-    } else {
-        res.header('Access-Control-Allow-Origin', origin);
-        res.header('Access-Control-Allow-Headers',
-            'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept,' +
-            'Access-Control-Allow-Request-Method');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-        res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-        next();
     }
 
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Headers',
+        'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept,' +
+        'Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
 });
 
 server.use(MAINPATH, rWaiter);

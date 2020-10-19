@@ -9,28 +9,29 @@ module.exports = {
       try {
          var params = req.body;
          params.waiterId = req.users.id;
-         var objAtt = await buildCreateAttending(params);
-         var dataInfo = await models.AttendingWaiters.create(objAtt);;
+         var objOrder = await buildCreateAttending(params);
+         var info = await models.AttendingWaiters.create(objOrder);;
 
-         if (!dataInfo) {
+         if (!info) {
             return res.status(202).json({
-               code: 202,
+               code: 402,
                msg: 'Hubo un error al ingresar los datos. Intente de nuevo.'
             });
-         } else {
-            var data = {
-               orders: dataInfo.orders,
-               tableId: dataInfo.tableId,
-               dateAttending: dataInfo.dateAttending,
-               actualTableAttending: dataInfo.actualTableAttending,
-            }
-            await sendQueue(data);
-            return res.status(200).json({
-               dataInfo,
-               code: 200,
-               msg: 'Mesa ocupada.'
-            });
          }
+
+         var data = {
+            orders: info.orders,
+            tableId: info.tableId,
+            dateAttending: info.dateAttending,
+            actualTableAttending: info.actualTableAttending,
+         }
+         await sendQueue(data);
+         return res.status(200).json({
+            info,
+            code: 200,
+            msg: 'Mesa ocupada.'
+         });
+
 
       } catch (error) {
          console.log('createAttending');
@@ -43,21 +44,21 @@ module.exports = {
    },
    listAttendByWaiter: async (req, res) => {
       try {
-         var idAtt = {
+         var setWhere = {
             where: {
                waiterId: req.params.waiterId
             }
          };
-         var dataInfo = await models.AttendingWaiters.findAll(idAtt);
+         var info = await models.AttendingWaiters.findAll(setWhere);
 
-         if (!dataInfo) {
+         if (!info) {
             return res.status(202).json({
                code: 202,
                msg: 'No ha atendido a nadie.'
             });
          }
          return res.status(200).json({
-            dataInfo,
+            info,
             code: 200,
             msg: 'Sus atenciones.'
          });
@@ -85,16 +86,16 @@ module.exports = {
             statusAttending: false,
             rates: req.body.rates
          };
-         var dataInfo = await models.AttendingWaiters.update(stmt, setWhere);
+         var info = await models.AttendingWaiters.update(stmt, setWhere);
 
-         if (!dataInfo) {
+         if (!info) {
             return res.status(202).json({
                code: 202,
                msg: 'No se cambió el estado. Intente de nuevo.'
             });
          }
          return res.status(200).json({
-            dataInfo,
+            info,
             code: 200,
             msg: 'Servicio hecho.'
          });
@@ -115,16 +116,16 @@ module.exports = {
                tableId: tableId
             }
          };
-         var dataInfo = await models.AttendingWaiters.findOne(setWhere);
+         var info = await models.AttendingWaiters.findOne(setWhere);
 
-         if (!dataInfo) {
+         if (!info) {
             return res.status(202).json({
                code: 202,
                msg: 'En esta mesa no se ha pagado.'
             });
          }
          return res.status(200).json({
-            dataInfo,
+            info,
             code: 200,
             msg: 'En esta mesa se pagó.'
          });
@@ -147,21 +148,21 @@ module.exports = {
             attributes: ['id', 'statusAttending']
          };
 
-         var dataInfo = await models.AttendingWaiters.findAll(setWhere);
-         dataInfo.map(function (value, index) {
-            let status = dataInfo[index].statusAttending
+         var info = await models.AttendingWaiters.findAll(setWhere);
+         info.map(function (value, index) {
+            let status = info[index].statusAttending
             if (status !== true) {
                return;
-            } else {
-               let _id = dataInfo[index].id;
-               models.AttendingWaiters.update({
-                  statusAttending: false
-               }, {
-                  where: {
-                     id: _id
-                  }
-               });
             }
+            let _id = info[index].id;
+            models.AttendingWaiters.update({
+               statusAttending: false
+            }, {
+               where: {
+                  id: _id
+               }
+            });
+
          });
 
       } catch (error) {
@@ -178,11 +179,11 @@ module.exports = {
 async function sendQueue(objData) {
    amq.connect(set.rabbit, function (err, conn) {
       if (err != null) {
-         bail(err);
+         throw err;
       }
       conn.createChannel(function (err, channel) {
          if (err != null) {
-            bail(err);
+            throw err;
          }
          objData = JSON.stringify(objData);
          channel.assertQueue(set.memorydb);
@@ -209,9 +210,4 @@ async function buildCreateAttending(params) {
 async function setHour() {
    var date = new Date();
    return date.setHours(date.getHours() - 5);
-}
-
-function bail(err) {
-   console.error(err);
-   process.exit(1);
 }

@@ -1,4 +1,4 @@
-'use strict';
+'use strict';use_env_variable
 
 const amq = require('amqplib/callback_api');
 const set = require('../../set-ups/setting');

@@ -24,7 +24,7 @@ exports.authMethod = async (req, res, next) => {
          }
          var findToken = await models.BlackListToken.findAll(objBkl);
          if (!findToken) {
-            await models.BlackListToken.create(objBkl);
+            models.BlackListToken.create(objBkl);
          }
          return res.status(403).json({
             message: 'El token ha expirado'
@@ -35,7 +35,7 @@ exports.authMethod = async (req, res, next) => {
          entryWork: new Date(),
          nickName: payload.genericNickName
       };
-      await models.TrackingLogin.create(auxObj);
+      models.TrackingLogin.create(auxObj);
 
    } catch (error) {
       console.log(error)
